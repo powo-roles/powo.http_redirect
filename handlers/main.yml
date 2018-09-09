@@ -4,3 +4,4 @@
   service:
     name: "{{ hr_httpd_service }}"
     state: restarted
+  when: hr_service_restart

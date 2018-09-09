@@ -6,6 +6,7 @@ hr_from_ssl: false
 # hr_to_domain: str
 hr_force_ssl: "{{ hr_from_ssl }}"
 hr_permanent: false
+hr_service_restart: false
 
 # Either
 hr_letsencrypt: "{{ hr_certificate_file | default(hr_from_ssl) }}"
