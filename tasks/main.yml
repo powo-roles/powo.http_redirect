@@ -1,19 +1,40 @@
 ---
 
-- name: http redirect to {{ hr_to_domain }}
-  template:
-    src: conf.j2
-    dest: "{{ hr_httpd_conf_dir }}/{{ hr_configuration_filename }}"
-  become: true
-  become_user: root
-  notify: httpd
-  when: hr_service_provider == 'apache'
 
-- name: http redirect to {{ hr_to_domain }}
-  template:
-    src: nginx.conf.j2
-    dest: "{{ hr_nginx_conf_dir }}/{{ hr_configuration_filename }}"
-  become: true
-  become_user: root
-  notify: nginx
+- name: apache
+  when: hr_service_provider == 'apache'
+  block:
+    - name: http redirect to {{ hr_to_domain }}
+      template:
+        src: conf.j2
+        dest: "{{ hr_httpd_conf_dir }}/{{ hr_configuration_filename }}"
+      become: true
+      become_user: root
+      notify: httpd
+      when: not hr_remove
+
+    - name: remove http redirect to {{ hr_to_domain }}
+      file:
+        path: "{{ hr_httpd_conf_dir }}/{{ hr_configuration_filename }}"
+        state: absent
+      notify: httpd
+      when: hr_remove
+
+- name: apache
   when: hr_service_provider == 'nginx'
+  block:
+    - name: http redirect to {{ hr_to_domain }}
+      template:
+        src: nginx.conf.j2
+        dest: "{{ hr_nginx_conf_dir }}/{{ hr_configuration_filename }}"
+      become: true
+      become_user: root
+      notify: nginx
+      when: not hr_remove
+
+    - name: remove http redirect to {{ hr_to_domain }}
+      file:
+        path: "{{ hr_nginx_conf_dir }}/{{ hr_configuration_filename }}"
+        state: absent
+      notify: nginx
+      when: hr_remove
