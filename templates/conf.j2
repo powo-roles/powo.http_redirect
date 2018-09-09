@@ -21,11 +21,11 @@
     {% endif %}
 
     SSLEngine on
-    [% if hr_letsencrypt %}
+    {% if hr_letsencrypt -%}
     SSLCertificateFile /etc/letsencrypt/live/{{ hr_to_domain }}/cert.pem
     SSLCertificateKeyFile /etc/letsencrypt/live/{{ hr_to_domain }}/privkey.pem
     SSLCACertificateFile /etc/letsencrypt/live/{{ hr_to_domain }}/chain.pem
-    {% else %}
+    {% else -%}
     SSLCertificateFile {{ hr_certificate_file }}
     SSLCertificateKeyFile {{ hr_certificate_key_file }}
     SSLCACertificateFile {{ hr_ca_certificate_file }}
