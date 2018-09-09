@@ -3,13 +3,13 @@
 
 - name: apache
   when: hr_service_provider == 'apache'
+  become: true
+  become_user: root
   block:
     - name: http redirect to {{ hr_to_domain }}
       template:
         src: conf.j2
         dest: "{{ hr_httpd_conf_dir }}/{{ hr_configuration_filename }}"
-      become: true
-      become_user: root
       notify: httpd
       when: not hr_remove
 
@@ -22,13 +22,13 @@
 
 - name: apache
   when: hr_service_provider == 'nginx'
+  become: true
+  become_user: root
   block:
     - name: http redirect to {{ hr_to_domain }}
       template:
         src: nginx.conf.j2
         dest: "{{ hr_nginx_conf_dir }}/{{ hr_configuration_filename }}"
-      become: true
-      become_user: root
       notify: nginx
       when: not hr_remove
 
