@@ -1,0 +1,9 @@
+---
+
+- name: http redirect to {{ hr_to_domain }}
+  template:
+    src: conf.j2
+    dest: "{{ hr_httpd_conf_dir }}/{{ hr_configuration_filename }}"
+  become: true
+  become_user: root
+  notify: httpd

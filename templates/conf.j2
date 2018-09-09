@@ -1,0 +1,37 @@
+
+<VirtualHost *:80>
+    ServerName {{ _hr_from_domain }}
+    {% if _hr_from_aliases %}
+    {% for alias in _hr_from_aliases %}
+    ServerAlias {{ alias }}
+    {% endfor %}
+    {% endif %}
+
+    RewriteEngine On
+    RewriteRule .* {{ 'https' if hr_force_ssl else 'http' }}://{{ hr_to_domain }}%{REQUEST_URI} [R={{ _hr_permanent }},L]
+</VirtualHost>
+
+{% if hr_from_ssl %}
+<VirtualHost *:443>
+    ServerName {{ _hr_from_domain }}
+    {% if _hr_from_aliases %}
+    {% for alias in _hr_from_aliases %}
+    ServerAlias {{ alias }}
+    {% endfor %}
+    {% endif %}
+
+    SSLEngine on
+    [% if hr_letsencrypt %}
+    SSLCertificateFile /etc/letsencrypt/live/{{ hr_to_domain }}/cert.pem
+    SSLCertificateKeyFile /etc/letsencrypt/live/{{ hr_to_domain }}/privkey.pem
+    SSLCACertificateFile /etc/letsencrypt/live/{{ hr_to_domain }}/chain.pem
+    {% else %}
+    SSLCertificateFile {{ hr_certificate_file }}
+    SSLCertificateKeyFile {{ hr_certificate_key_file }}
+    SSLCACertificateFile {{ hr_ca_certificate_file }}
+    {% endif %}
+
+    RewriteEngine On
+    RewriteRule .* https://{{ hr_to_domain }}%{REQUEST_URI} [R={{ _hr_permanent }},L]
+</VirtualHost>
+{% endif %}

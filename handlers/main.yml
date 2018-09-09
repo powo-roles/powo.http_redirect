@@ -1,0 +1,6 @@
+---
+
+- name: httpd
+  service:
+    name: "{{ hr_httpd_service }}"
+    state: restarted

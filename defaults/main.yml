@@ -1,0 +1,32 @@
+---
+
+# Mandatory
+# hr_from_domains: [str]
+hr_from_ssl: false
+# hr_to_domain: str
+hr_force_ssl: "{{ hr_from_ssl }}"
+hr_permanent: false
+
+# Either
+hr_letsencrypt: "{{ hr_certificate_file | default(hr_from_ssl) }}"
+# hr_certificate_file: str
+# hr_certificate_key_file: str
+# hr_ca_certificate_file: str
+
+# hr_file_index: int
+hr_configuration_filename: "{{ hr_file_index + '-' + hr_from_domain + '-redirect.conf' }}"
+
+_hr_from_domain: "{{ hr_from_domains[0] }}"
+_hr_from_aliases: "{{ hr_from_domains[1:] }}"
+_hr_permanent: "{{ 'temp' if not hr_permanent else 'permanent' }}"
+
+hr_httpd_service: "{{ _hr_httpd_service_distro | distro(vars) }}"
+hr_httpd_conf_dir: "{{ _hr_httpd_conf_dir_distro | distro(vars) }}"
+
+_hr_httpd_conf_dir_distro:
+  RedHat: /etc/httpd/conf.d
+  Debian: /etc/apache2/sites-enabled
+_hr_httpd_service_distro:
+  RedHat: httpd
+  Debian: apache2
+
