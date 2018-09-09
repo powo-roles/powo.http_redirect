@@ -16,7 +16,7 @@ hr_letsencrypt: "{{ hr_certificate_file | default(hr_from_ssl) }}"
 # hr_ca_certificate_file: str
 
 # hr_file_index: int
-hr_configuration_filename: "{{ hr_file_index + '-' + hr_from_domain + '-redirect.conf' }}"
+hr_configuration_filename: "{{ hr_file_index | string + '-' + hr_from_domain + '-redirect.conf' }}"
 
 _hr_from_domain: "{{ hr_from_domains[0] }}"
 _hr_from_aliases: "{{ hr_from_domains[1:] }}"
