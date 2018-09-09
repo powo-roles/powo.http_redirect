@@ -8,7 +8,7 @@
     {% endif %}
 
     RewriteEngine On
-    RewriteRule .* {{ 'https' if hr_force_ssl else 'http' }}://{{ hr_to_domain }}%{REQUEST_URI} [R={{ _hr_permanent }},L]
+    RewriteRule .* {{ 'https' if hr_force_ssl else 'http' }}://{{ hr_to_domain }}%{REQUEST_URI} {{ _hr_flags_str }}
 </VirtualHost>
 
 {% if hr_from_ssl %}
@@ -32,6 +32,6 @@
     {% endif %}
 
     RewriteEngine On
-    RewriteRule .* https://{{ hr_to_domain }}%{REQUEST_URI} [R={{ _hr_permanent }},L]
+    RewriteRule .* https://{{ hr_to_domain }}%{REQUEST_URI} {{ _hr_flags_str }}
 </VirtualHost>
 {% endif %}
