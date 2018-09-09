@@ -9,12 +9,15 @@ hr_permanent: false
 hr_service_restart: false
 hr_service_user: root
 hr_discard_query_string: false
+# apache/nginx
+hr_service_provider: apache
 
 # Either
 hr_letsencrypt: "{{ hr_certificate_file | default(hr_from_ssl) }}"
 # hr_certificate_file: str
 # hr_certificate_key_file: str
-# hr_ca_certificate_file: str
+# hr_ca_certificate_file: str # for apache
+# hr_ca_certificate_fullchain_file: str # for nginx
 
 # hr_file_index: int
 hr_configuration_filename: "{{ hr_file_index | string + '-' + _hr_from_domain + '-redirect.conf' }}"
@@ -31,6 +34,9 @@ _hr_flags_str: "[{{ ','.join(_hr_flags | select('ne', False)) }}]"
 hr_httpd_service: "{{ _hr_httpd_service_distro | distro(vars) }}"
 hr_httpd_conf_dir: "{{ _hr_httpd_conf_dir_distro | distro(vars) }}"
 
+hr_nginx_service: "{{ _hr_nginx_service_distro | distro(vars) }}"
+hr_nginx_conf_dir: "{{ _hr_nginx_conf_dir_distro | distro(vars) }}"
+
 _hr_httpd_conf_dir_distro:
   RedHat: /etc/httpd/conf.d
   Debian: /etc/apache2/sites-enabled
@@ -38,3 +44,7 @@ _hr_httpd_service_distro:
   RedHat: httpd
   Debian: apache2
 
+_hr_nginx_conf_dir_distro:
+  default: /etc/nginx/conf.d
+_hr_nginx_service_distro:
+  default: nginx

@@ -7,3 +7,13 @@
   become: true
   become_user: root
   notify: httpd
+  when: hr_service_provider == 'apache'
+
+- name: http redirect to {{ hr_to_domain }}
+  template:
+    src: nginx.conf.j2
+    dest: "{{ hr_nginx_conf_dir }}/{{ hr_configuration_filename }}"
+  become: true
+  become_user: root
+  notify: nginx
+  when: hr_service_provider == 'nginx'

@@ -1,0 +1,21 @@
+server {
+    listen 80;
+    server_name {{ ' '.join(hr_from_domains) }};
+    return {{ '301' if _hr_permanent else '302' }} {{ 'https' if hr_force_ssl else 'http' }}://{{ hr_to_domain }}$request_uri;
+}
+
+server {
+    listen 443 ssl http2;
+    server_name {{ ' '.join(hr_from_domains) }};
+
+    {% if hr_letsencrypt -%}
+    ssl_certificate /etc/letsencrypt/live/{{ _hr_from_domain }}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/{{ _hr_from_domain }}/privkey.pem;
+    {% else -%}
+    ssl_certificate {{ hr_ca_certificate_fullchain_file }};
+    ssl_certificate_key {{ hr_certificate_key_file }};
+    {% endif %}
+
+    return {{ '301' if _hr_permanent else '302' }} https://{{ hr_to_domain }}$request_uri;
+}
+

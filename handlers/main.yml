@@ -7,3 +7,11 @@
   when: hr_service_restart
   become: true
   become_user: "{{ hr_service_user }}"
+
+- name: nginx
+  service:
+    name: "{{ hr_nginx_service }}"
+    state: restarted
+  when: hr_service_restart
+  become: true
+  become_user: "{{ hr_service_user }}"
