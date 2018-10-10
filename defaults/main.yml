@@ -13,6 +13,7 @@ hr_discard_query_string: false
 hr_service_provider: apache
 # true for deleting a config
 hr_remove: false
+hr_listen_ip: "*"
 
 # Either
 hr_letsencrypt: "{{ hr_certificate_file | default(hr_from_ssl) }}"
