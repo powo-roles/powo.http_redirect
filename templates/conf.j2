@@ -1,5 +1,5 @@
 
-<VirtualHost hr_listen_ip:80>
+<VirtualHost {{ hr_listen_ip }}:80>
     ServerName {{ _hr_from_domain }}
     {% if _hr_from_aliases %}
     {% for alias in _hr_from_aliases %}
@@ -12,7 +12,7 @@
 </VirtualHost>
 
 {% if hr_from_ssl %}
-<VirtualHost hr_listen_ip:443>
+<VirtualHost {{ hr_listen_ip }}:443>
     ServerName {{ _hr_from_domain }}
     {% if _hr_from_aliases %}
     {% for alias in _hr_from_aliases %}
